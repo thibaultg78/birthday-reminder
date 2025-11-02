@@ -1,0 +1,42 @@
+name: Monthly Birthday Reminder
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'  # Le 1er de chaque mois à 6h UTC (7h/8h Paris)
+  workflow_dispatch:  # Pour tester manuellement quand on veut
+
+jobs:
+  monthly-birthdays:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Get monthly birthdays
+        id: check
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: node monthly-birthdays.js
+        continue-on-error: true
+      
+      - name: Send email if birthdays found
+        if: steps.check.outcome == 'success'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: file://monthly-subject.txt
+          to: gibard.thibault@gmail.com
+          from: Bot Anniversaires <noreply@github.com>
+          body: file://monthly-alert.txt

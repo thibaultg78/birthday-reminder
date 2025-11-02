@@ -57,16 +57,30 @@ async function checkBirthdays() {
 
     // If birthdays found
     if (upcomingBirthdays.length > 0) {
-        const message = `🎂 Anniversaire${upcomingBirthdays.length > 1 ? 's' : ''} dans ${config.daysInAdvance} jours :\n\n${upcomingBirthdays.join(', ')}`;
+        // Build the email message
+        let message = '🎂 Anniversaire';
 
-        // Créer l'objet du mail
-        const subject = upcomingBirthdays.length === 1
-            ? `🎂 Anniversaire de ${upcomingBirthdays[0]} dans ${config.daysInAdvance} jours`
-            : `🎂 ${upcomingBirthdays.length} anniversaires dans ${config.daysInAdvance} jours`;
+        // Add an "s" if multiple birthdays
+        if (upcomingBirthdays.length > 1) {
+            message = message + 's';
+        }
+
+        message = message + ` dans ${config.daysInAdvance} jours :\n\n${upcomingBirthdays.join(', ')}`;
+
+        // Create the email subject
+        let subject = '';
+
+        if (upcomingBirthdays.length === 1) {
+            // Single birthday
+            subject = `🎂 Anniversaire de ${upcomingBirthdays[0]} dans ${config.daysInAdvance} jours`;
+        } else {
+            // Multiple birthdays
+            subject = `🎂 ${upcomingBirthdays.length} anniversaires dans ${config.daysInAdvance} jours`;
+        }
 
         console.log(message);
 
-        // Export pour GitHub Actions
+        // Export for GitHub Actions
         fs.writeFileSync('birthday-alert.txt', message);
         fs.writeFileSync('birthday-subject.txt', subject);
         process.exit(0);
