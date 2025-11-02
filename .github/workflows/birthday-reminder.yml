@@ -1,0 +1,42 @@
+name: Birthday Reminder
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # Tous les jours à 7h UTC (9h Paris)
+  workflow_dispatch:  # Permet de tester manuellement
+
+jobs:
+  check-birthdays:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Check birthdays
+        id: check
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: node check-birthdays.js
+        continue-on-error: true
+      
+      - name: Send email if birthday found
+        if: steps.check.outcome == 'success'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "🎂 Rappel anniversaire !"
+          to: gibard.thibault@gmail.com
+          from: Bot Anniversaires <noreply@github.com>
+          body: file://birthday-alert.txt

@@ -1,0 +1,9 @@
+{
+    "name": "birthday-reminder",
+    "version": "1.0.0",
+    "description": "Bot de rappel d'anniversaires",
+    "main": "check-birthdays.js",
+    "dependencies": {
+        "googleapis": "^128.0.0"
+    }
+}
