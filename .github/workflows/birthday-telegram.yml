@@ -1,0 +1,37 @@
+name: Birthday Telegram (Day Of)
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Tous les jours à 6h UTC
+  workflow_dispatch:  # Test manuel
+
+jobs:
+  send-birthday-telegram:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Check today's birthdays
+        id: check
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: node today-telegram-birthdays.js
+        continue-on-error: true
+      
+      - name: Send Telegram if birthday today
+        if: steps.check.outcome == 'success'
+        run: |
+          MESSAGE=$(cat today-telegram.txt)
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="$MESSAGE"
