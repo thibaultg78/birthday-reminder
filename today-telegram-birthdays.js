@@ -60,7 +60,11 @@ async function checkTodayBirthdays() {
             message = message + 's';
         }
 
-        message = message + ' aujourd\'hui :\n' + todayBirthdays.join(', ');
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateComplete = today.toLocaleDateString('fr-FR', options);
+        const dateCapitalized = dateComplete.charAt(0).toUpperCase() + dateComplete.slice(1);
+
+        message = message + ' aujourd\'hui, le ' + dateCapitalized + ' :\n\n' + todayBirthdays.join(', ');
 
         message = message + '\n\nBon anniversaire ! 🎉';
 
