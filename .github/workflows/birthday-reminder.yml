@@ -2,7 +2,7 @@ name: Birthday Reminder
 
 on:
   schedule:
-    - cron: '0 7 * * *'  # Tous les jours à 7h UTC (9h Paris)
+    - cron: '0 6 * * *'  # 6h UTC = 7h Paris (heure d'hiver) / 8h Paris (heure d'été)
   workflow_dispatch:  # Permet de tester manuellement
 
 jobs:
@@ -36,7 +36,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "🎂 Rappel anniversaire !"
+          subject: file://birthday-subject.txt
           to: gibard.thibault@gmail.com
           from: Bot Anniversaires <noreply@github.com>
           body: file://birthday-alert.txt
