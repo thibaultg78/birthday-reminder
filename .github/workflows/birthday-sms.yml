@@ -1,0 +1,41 @@
+name: Birthday SMS (Day Of)
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Tous les jours à 8h UTC (9h/10h Paris selon heure d'été ou d'hiver)
+  workflow_dispatch:  # Test manuel
+
+jobs:
+  send-birthday-sms:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Check today's birthdays
+        id: check
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: node today-birthdays.js
+        continue-on-error: true
+      
+      - name: Send SMS if birthday today
+        if: steps.check.outcome == 'success'
+        uses: twilio-labs/actions-sms@v1
+        with:
+          fromPhoneNumber: '+12299494476'
+          toPhoneNumber: ${{ secrets.MY_PHONE_NUMBER }}
+          message: file://today-sms.txt
+        env:
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_API_KEY: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_API_SECRET: ${{ secrets.TWILIO_AUTH_TOKEN }}
