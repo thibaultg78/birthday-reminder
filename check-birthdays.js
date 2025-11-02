@@ -57,7 +57,7 @@ async function checkBirthdays() {
 
     // If birthdays found
     if (upcomingBirthdays.length > 0) {
-        const message = `🎂 Anniversaire${upcomingBirthdays.length > 1 ? 's' : ''} dans ${config.daysInAdvance} jours :\n${upcomingBirthdays.join(', ')}`;
+        const message = `🎂 Anniversaire${upcomingBirthdays.length > 1 ? 's' : ''} dans ${config.daysInAdvance} jours :\n\n${upcomingBirthdays.join(', ')}`;
 
         // Créer l'objet du mail
         const subject = upcomingBirthdays.length === 1

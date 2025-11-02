@@ -38,5 +38,5 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: file://birthday-subject.txt
           to: gibard.thibault@gmail.com
-          from: Bot Anniversaires <noreply@github.com>
+          from: Robot Anniversaires <noreply@github.com>
           body: file://birthday-alert.txt
