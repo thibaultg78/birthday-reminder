@@ -84,7 +84,12 @@ async function checkBirthdays() {
         fs.writeFileSync('birthday-alert.txt', message);
         fs.writeFileSync('birthday-subject.txt', subject);
         process.exit(0);
+    } else {
+        console.log('Aucun anniversaire à venir.');
+        process.exit(1);
     }
 }
 
 checkBirthdays().catch(console.error);
+
+
