@@ -1,4 +1,4 @@
-name: Birthday Reminder
+name: Birthday Reminder - 7 days before
 
 on:
   schedule:

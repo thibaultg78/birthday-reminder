@@ -1,4 +1,4 @@
-name: Birthday Telegram (Day Of)
+name: Birthday Telegram & Email (Day Of)
 
 on:
   schedule:
