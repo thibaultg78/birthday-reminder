@@ -40,17 +40,3 @@ jobs:
           to: gibard.thibault@gmail.com
           from: Robot Anniversaires <noreply@github.com>
           body: file://birthday-alert.txt
-
-      
-      - name: Send email if birthday today
-        if: steps.check.outcome == 'success'
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: file://today-email-subject.txt
-          to: gibard.thibault@gmail.com
-          from: Robot Anniversaires <noreply@github.com>
-          body: file://today-email-alert.txt
