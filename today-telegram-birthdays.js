@@ -70,12 +70,25 @@ async function checkTodayBirthdays() {
 
         console.log(message);
 
+        // Create the email subject
+        let subject = '';
+
+        if (todayBirthdays.length === 1) {
+            // Single birthday
+            subject = `🎂 Anniversaire de ${todayBirthdays[0]} aujourd'hui`;
+        } else {
+            // Multiple birthdays
+            subject = `🎂 ${todayBirthdays.length} anniversaires aujourd'hui`;
+        }
+
         // Export pour Telegram
         fs.writeFileSync('today-telegram.txt', message);
+
+        // Export pour Email (même format que l'email 7 jours avant)
+        fs.writeFileSync('today-email-alert.txt', message);
+        fs.writeFileSync('today-email-subject.txt', subject);
+
         process.exit(0);
-    } else {
-        console.log('Aucun anniversaire aujourd\'hui.');
-        process.exit(1);
     }
 }
 
