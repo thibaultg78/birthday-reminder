@@ -89,6 +89,9 @@ async function checkTodayBirthdays() {
         fs.writeFileSync('today-email-subject.txt', subject);
 
         process.exit(0);
+    } else {
+        console.log('Aucun anniversaire aujourd\'hui.');
+        process.exit(1);
     }
 }
 
