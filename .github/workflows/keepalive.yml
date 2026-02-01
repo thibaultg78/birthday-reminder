@@ -2,11 +2,14 @@ name: Keep Alive
 
 on:
   schedule:
-    - cron: '0 0 1 * *'  # Le 1er de chaque mois à minuit UTC
+    - cron: '0 0 1 * *'
+  workflow_dispatch:  # Permet de tester manuellement
 
 jobs:
   keepalive:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Checkout code
