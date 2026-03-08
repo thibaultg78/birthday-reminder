@@ -41,7 +41,7 @@ async function checkBirthdays() {
 
     // Loop through rows (skip header)
     for (let i = 1; i < rows.length; i++) {
-        const [nom, _, dateAnniversaire] = rows[i];
+        const [nom, dateNaissance, dateAnniversaire] = rows[i];
 
         if (!dateAnniversaire) continue;
 
@@ -51,7 +51,16 @@ async function checkBirthdays() {
         const month = parts[1];
 
         if (day === checkDay && month === checkMonth) {
-            upcomingBirthdays.push(nom);
+            // Calculer l'âge à partir de l'année de naissance
+            let label = nom;
+            if (dateNaissance) {
+                const yearMatch = dateNaissance.match(/\d{4}/);
+                if (yearMatch) {
+                    const age = checkDate.getFullYear() - parseInt(yearMatch[0]);
+                    label = `${nom} - ${age} ans`;
+                }
+            }
+            upcomingBirthdays.push(label);
         }
     }
 

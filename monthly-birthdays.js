@@ -38,7 +38,7 @@ async function getMonthlyBirthdays() {
 
     // Loop through rows (skip header)
     for (let i = 1; i < rows.length; i++) {
-        const [nom, _, dateAnniversaire] = rows[i];
+        const [nom, dateNaissance, dateAnniversaire] = rows[i];
 
         if (!dateAnniversaire) continue;
 
@@ -48,8 +48,17 @@ async function getMonthlyBirthdays() {
         const month = parts[1];
 
         if (month === currentMonth) {
+            // Calculer l'âge à partir de l'année de naissance
+            let ageStr = '';
+            if (dateNaissance) {
+                const yearMatch = dateNaissance.match(/\d{4}/);
+                if (yearMatch) {
+                    const age = today.getFullYear() - parseInt(yearMatch[0]);
+                    ageStr = ` - ${age} ans`;
+                }
+            }
             monthBirthdays.push({
-                nom: nom,
+                nom: nom + ageStr,
                 jour: day,
                 dateTexte: dateAnniversaire
             });
