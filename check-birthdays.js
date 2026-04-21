@@ -1,13 +1,28 @@
-const { google } = require('googleapis');
 const fs = require('fs');
 
 // Load config
 const config = JSON.parse(fs.readFileSync('birthdays-config.json', 'utf8'));
 
-// Load Google credentials
-const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+function formatUpcomingBirthdayDate(date) {
+    return `le ${date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}`;
+}
+
+function buildBirthdayLabel(nom, dateNaissance, checkDate) {
+    let label = nom;
+    if (dateNaissance) {
+        const yearMatch = dateNaissance.match(/\d{4}/);
+        if (yearMatch) {
+            const age = checkDate.getFullYear() - parseInt(yearMatch[0]);
+            label = `${nom} - ${age} ans`;
+        }
+    }
+    return `${label} - ${formatUpcomingBirthdayDate(checkDate)}`;
+}
 
 async function checkBirthdays() {
+    const { google } = require('googleapis');
+    const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+
     // Google Auth
     const auth = new google.auth.GoogleAuth({
         credentials,
@@ -51,16 +66,7 @@ async function checkBirthdays() {
         const month = parts[1];
 
         if (day === checkDay && month === checkMonth) {
-            // Calculer l'âge à partir de l'année de naissance
-            let label = nom;
-            if (dateNaissance) {
-                const yearMatch = dateNaissance.match(/\d{4}/);
-                if (yearMatch) {
-                    const age = checkDate.getFullYear() - parseInt(yearMatch[0]);
-                    label = `${nom} - ${age} ans`;
-                }
-            }
-            upcomingBirthdays.push(label);
+            upcomingBirthdays.push(buildBirthdayLabel(nom, dateNaissance, checkDate));
         }
     }
 
@@ -99,6 +105,8 @@ async function checkBirthdays() {
     }
 }
 
-checkBirthdays().catch(console.error);
+if (require.main === module) {
+    checkBirthdays().catch(console.error);
+}
 
-
+module.exports = { formatUpcomingBirthdayDate, buildBirthdayLabel };
