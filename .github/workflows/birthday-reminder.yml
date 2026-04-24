@@ -2,7 +2,7 @@ name: Birthday Reminder - 7 days before
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # 6h UTC = 7h Paris (heure d'hiver) / 8h Paris (heure d'été)
+    - cron: '17 4 * * *'  # 6h17 heure de Paris
   workflow_dispatch:  # Permet de tester manuellement
 
 jobs:
