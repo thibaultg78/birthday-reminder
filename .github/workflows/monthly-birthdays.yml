@@ -2,7 +2,7 @@ name: Monthly Birthday Reminder
 
 on:
   schedule:
-    - cron: '0 6 1 * *'  # Le 1er de chaque mois à 6h UTC (7h/8h Paris)
+    - cron: '21 4 1 * *'  # Le 1er de chaque mois à 6h UTC (7h/8h Paris)
   workflow_dispatch:  # Pour tester manuellement quand on veut
 
 jobs:
