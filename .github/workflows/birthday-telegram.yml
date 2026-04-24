@@ -2,7 +2,7 @@ name: Birthday Telegram & Email (Day Of)
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Tous les jours à 6h UTC
+    - cron: '19 4 * * *'  # 6h09 heure FR
   workflow_dispatch:  # Test manuel
 
 jobs:
